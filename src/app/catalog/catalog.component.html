@@ -3,7 +3,7 @@
       <a class="button" (click)="filter='Heads'">Heads</a>
       <a class="button" (click)="filter='Arms'">Arms</a>
       <a class="button" (click)="filter='Torsos'">Torsos</a>
-      <a class="button" (click)="filter='Bases'">Bases</a>
+      <a class="button" (click)="filter =='Bases'">Bases</a>
       <a class="button" (click)="filter=''">All</a>
     </div>
   
@@ -13,13 +13,16 @@
           <div class="product-details">
             <img [src]="getImageUrl(product)" [alt]=product.name />
             <div class="product-info">
-              <div class="name">{{ product.name }}</div>
-              <div class="description">{{ product.description }}</div>
-              <div class="category">Part Type: {{ product.category }}</div>
+              <div class="name">{{ product?.name }}</div>
+              <div class="description">{{ product?.description }}</div>
+              <div class="category">Part Type: {{ product?.category }}</div>
             </div>
           </div>
           <div class="price">
-            <div>${{ product.price.toFixed(2) }}</div>
+            <div *ngIf="product.discount === 0">{{ product.price | currency }}</div>
+            <div class="discount" *ngIf="product.discount > 0">
+                {{ (product.price * (1 - product.discount)) | currency:'GBP' }}
+            </div>
             <button class="cta">Buy</button>
           </div>
         </div>
