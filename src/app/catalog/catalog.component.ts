@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Product } from './product.model';
 import { ProductService } from './product.service';
 import { CartService } from '../cart/cart.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-catalog',
@@ -12,18 +12,20 @@ import { Router } from '@angular/router';
 export class CatalogComponent {
   products: Product[] | undefined;
   filter: string = '';
-  // private cartSvc: CartService = inject(CartService);
 
   constructor(
     private cartSvc: CartService,
     private productSvc: ProductService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.productSvc
-      .getProducts()
-      .subscribe((products) => (this.products = products));
+    this.productSvc.getProducts().subscribe((products) => (this.products = products));
+
+    this.route.queryParams.subscribe(params => {
+      this.filter = params['filter'] ?? '';
+    });
   }
 
   getFilterProducts() {
